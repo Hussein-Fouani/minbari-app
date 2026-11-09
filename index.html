@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>منبري · جدول القارئ</title>
+<meta name="description" content="منبري: تطبيق أندرويد ينظّم قراءات القارئ ومجالسه، مع التقويم الهجري والمناسبات والتنبيهات.">
+<meta property="og:title" content="منبري · جدول القارئ">
+<meta property="og:description" content="قراءاتك ومجالسك ومناسبات السنة الهجرية في تطبيق واحد.">
+<meta property="og:image" content="img/icon.png">
+<link rel="icon" href="img/icon.png">
+<style>
+  :root {
+    --bg:#f5f2ec; --card:#fffdf9; --ink:#1b2420; --muted:#5f6b66; --line:#e4ded2;
+    --brand:#1d5c42; --brand-ink:#ffffff; --tint:#d3e6dc; --gold:#b98a2e;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg:#0f1513; --card:#18211d; --ink:#e7ede9; --muted:#9db0a7; --line:#29352f;
+            --brand:#5cbf94; --brand-ink:#0b1f17; --tint:#1f3a2e; --gold:#d8ad55; }
+  }
+  * { box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+  body { margin:0; background:var(--bg); color:var(--ink);
+         font:17px/1.75 system-ui, "Segoe UI", Tahoma, "Noto Sans Arabic", sans-serif; }
+  .wrap { max-width:960px; margin:0 auto; padding:0 16px; }
+  header { padding:20px 0; }
+  header .wrap { display:flex; align-items:center; gap:10px; }
+  header img { width:36px; height:36px; border-radius:9px; }
+  header b { font-size:20px; }
+  header nav { margin-inline-start:auto; display:flex; gap:18px; font-size:15px; }
+  header nav a { color:var(--muted); text-decoration:none; }
+
+  .hero { display:grid; grid-template-columns:1.1fr .9fr; gap:32px; align-items:center; padding:28px 0 48px; }
+  .hero h1 { font-size:clamp(32px,6vw,48px); line-height:1.25; margin:0 0 14px; }
+  .hero p.lead { font-size:19px; color:var(--muted); margin:0 0 26px; }
+  .btn { display:inline-flex; align-items:center; gap:10px; background:var(--brand); color:var(--brand-ink);
+         text-decoration:none; font-weight:700; font-size:19px; padding:15px 28px; border-radius:999px; }
+  .btn svg { width:22px; height:22px; }
+  .meta { color:var(--muted); font-size:14px; margin-top:12px; }
+  .phone { justify-self:center; width:min(300px,80vw); border-radius:34px; border:8px solid var(--ink);
+           overflow:hidden; box-shadow:0 20px 50px rgba(0,0,0,.18); background:var(--card); }
+  .phone img { display:block; width:100%; height:auto; }
+
+  section { padding:44px 0; border-top:1px solid var(--line); }
+  h2 { font-size:28px; margin:0 0 22px; }
+  .grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+  .feat { background:var(--card); border:1px solid var(--line); border-radius:18px; padding:20px; }
+  .feat .ico { width:42px; height:42px; border-radius:12px; background:var(--tint); color:var(--brand);
+               display:grid; place-items:center; margin-bottom:10px; }
+  .feat .ico svg { width:22px; height:22px; }
+  .feat h3 { margin:0 0 6px; font-size:18px; }
+  .feat p { margin:0; color:var(--muted); font-size:15.5px; line-height:1.7; }
+
+  .shots { display:grid; grid-template-columns:repeat(3,1fr); gap:18px; }
+  .shots figure { margin:0; text-align:center; }
+  .shots img { width:100%; height:auto; border-radius:22px; border:1px solid var(--line); }
+  .shots figcaption { color:var(--muted); font-size:15px; margin-top:8px; }
+
+  .steps { counter-reset:s; list-style:none; padding:0; margin:0; display:grid; gap:12px; }
+  .steps li { counter-increment:s; background:var(--card); border:1px solid var(--line); border-radius:16px;
+              padding:14px 18px; display:flex; gap:14px; align-items:flex-start; }
+  .steps li::before { content:counter(s, arabic-indic); flex:none; width:32px; height:32px; border-radius:50%;
+                      background:var(--brand); color:var(--brand-ink); display:grid; place-items:center; font-weight:700; }
+
+  .plan { background:var(--card); border:1px solid var(--line); border-radius:22px; padding:26px; display:grid;
+          grid-template-columns:1fr auto; gap:20px; align-items:center; }
+  .plan h3 { margin:0 0 6px; font-size:22px; }
+  .plan ul { margin:8px 0 0; padding-inline-start:20px; color:var(--muted); }
+  .plan .price { font-size:30px; font-weight:800; color:var(--gold); }
+  .btn.alt { background:transparent; color:var(--brand); border:2px solid var(--brand); font-size:17px; padding:11px 22px; }
+  .contacts { display:flex; flex-wrap:wrap; gap:10px; justify-content:center; margin:10px 0 4px; }
+  .plan .price small { font-size:16px; font-weight:600; color:var(--muted); }
+
+  footer { padding:30px 0 46px; color:var(--muted); font-size:14px; border-top:1px solid var(--line); }
+  footer a { color:var(--muted); }
+  footer .wrap { display:flex; flex-wrap:wrap; gap:8px 20px; }
+  [hidden] { display:none !important; }
+
+  @media (max-width:760px) {
+    header nav { display:none; }
+    .hero { grid-template-columns:1fr; text-align:center; padding-top:8px; }
+    .hero .btn { width:100%; justify-content:center; }
+    .grid, .shots { grid-template-columns:1fr; }
+    .shots { grid-auto-flow:column; grid-auto-columns:70%; grid-template-columns:none; overflow-x:auto;
+             scroll-snap-type:x mandatory; padding-bottom:6px; }
+    .shots figure { scroll-snap-align:center; }
+    .plan { grid-template-columns:1fr; text-align:center; }
+    .plan ul { text-align:start; display:inline-block; }
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <img src="img/icon.png" alt="">
+    <b>منبري</b>
+    <nav>
+      <a href="#features">المزايا</a>
+      <a href="#install">التثبيت</a>
+      <a href="#subscribe">الاشتراك</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="hero">
+    <div>
+      <h1>جدول قراءاتك ومجالسك،<br>في جيبك.</h1>
+      <p class="lead">منبري يرتّب مواعيد القارئ على مدار السنة الهجرية: المناسبات والليالي، والمواعيد المؤكّدة والمبدئية، والتنبيهات قبل كل قراءة.</p>
+      <a class="btn" href="https://github.com/Hussein-Fouani/minbari-app/releases/latest/download/minbari.apk">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11m0 0-4.5-4.5M12 15l4.5-4.5M5 20h14"/></svg>
+        تنزيل التطبيق
+      </a>
+      <p class="meta">لهواتف أندرويد · الإصدار 0.1.0 (١١) · ٣١ ميغابايت · ٧ أيام تجربة مجانية</p>
+    </div>
+    <div class="phone"><img src="img/calendar.webp" alt="شاشة التقويم في منبري" width="540" height="1200"></div>
+  </div>
+
+  <section id="features">
+    <h2>ما يقدّمه منبري</h2>
+    <div class="grid">
+      <div class="feat">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/></svg></div>
+        <h3>تقويم هجري ومناسبات</h3>
+        <p>ليالي المناسبات على مدار السنة، وبدايات الأشهر حسب الجهة التي تتبعها.</p>
+      </div>
+      <div class="feat">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M4 12h10M4 18h7"/><circle cx="18" cy="17" r="3"/></svg></div>
+        <h3>جدول واضح</h3>
+        <p>القراءة والمكان والمضيف والوقت، مرة واحدة أو عدّة ليالٍ أو بشكل متكرّر، مع تنبيه عند تعارض المواعيد.</p>
+      </div>
+      <div class="feat">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12Z"/></svg></div>
+        <h3>من رسالة واتساب إلى الجدول</h3>
+        <p>شارك رسالة الطلب مع منبري، فيستخرج التاريخ والوقت والمكان والرقم لتراجعها وتحفظها.</p>
+      </div>
+      <div class="feat">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9M13.7 21a2 2 0 0 1-3.4 0"/></svg></div>
+        <h3>تنبيهات في وقتها</h3>
+        <p>قبل كل قراءة، وتذكير بموعد الانطلاق إليها، وأوقات الصلاة إن أردت.</p>
+      </div>
+      <div class="feat">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></div>
+        <h3>بالصوت وأثناء القيادة</h3>
+        <p>اسأل منبري عن قراءتك التالية أو أضف موعداً بصوتك، وفي السيارة يقرأ لك مواعيدك ويتصل بأصحاب المجالس.</p>
+      </div>
+      <div class="feat">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M7 18a5 5 0 0 1-.5-10A6 6 0 0 1 18 9a4.5 4.5 0 0 1-.5 9H7Z"/></svg></div>
+        <h3>محفوظ في حسابك</h3>
+        <p>نسخة من جدولك في حسابك، تعود إليك إذا غيّرت هاتفك. لا يراها أحد غيرك.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>من داخل التطبيق</h2>
+    <div class="shots">
+      <figure><img src="img/calendar.webp" alt="" loading="lazy" width="540" height="1200"><figcaption>التقويم والمناسبات</figcaption></figure>
+      <figure><img src="img/add.webp" alt="" loading="lazy" width="540" height="1200"><figcaption>إضافة قراءة</figcaption></figure>
+      <figure><img src="img/authority.webp" alt="" loading="lazy" width="540" height="1200"><figcaption>اختيار الجهة المعتمدة</figcaption></figure>
+    </div>
+  </section>
+
+  <section id="install">
+    <h2>طريقة التثبيت</h2>
+    <ol class="steps">
+      <li>اضغط «تنزيل التطبيق» وانتظر حتى يكتمل التنزيل.</li>
+      <li>افتح الملف من الإشعارات أو من مجلد التنزيلات.</li>
+      <li>إذا طلب الهاتف السماح بالتثبيت من هذا المصدر، فعّل الخيار ثم ارجع واضغط «تثبيت».</li>
+      <li>افتح منبري واختر الجهة التي تتبعها. لديك ٧ أيام تجربة، ثم يُطلب منك تسجيل الدخول بحساب Google.</li>
+    </ol>
+    <p class="meta">التحديثات: عند صدور نسخة جديدة يعرض التطبيق تنبيهاً ويفتح هذه الصفحة. ثبّت النسخة الجديدة فوق الحالية، وتبقى بياناتك كما هي.</p>
+  </section>
+
+  <section id="subscribe">
+    <h2>الاشتراك</h2>
+    <div class="plan">
+      <div>
+        <h3>اشتراك شهري</h3>
+        <ul>
+          <li>٧ أيام تجربة مجانية دون تسجيل.</li>
+          <li>بعدها تسجّل الدخول ويبدأ الاشتراك الشهري.</li>
+          <li>الحساب يعمل على هاتف واحد في كل مرّة.</li>
+        </ul>
+      </div>
+      <div>
+        <div class="price" >30$ <small>شهرياً</small></div>
+        <div class="contacts"><a class="btn alt" href="https://www.linkedin.com/in/hussein-fouani" target="_blank" rel="noopener">تواصل عبر LinkedIn</a></div>
+        <p class="meta">للاشتراك، راسلني وسأفعّل حسابك بعد الدفع.</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>منبري · Minbari</span>
+    <a href="privacy.html">سياسة الخصوصية</a>
+    <a href="privacy-en.html" lang="en" dir="ltr">Privacy policy</a>
+  </div>
+</footer>
+</body>
+</html>
